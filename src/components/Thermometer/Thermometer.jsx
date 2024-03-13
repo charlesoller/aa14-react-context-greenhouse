@@ -4,28 +4,32 @@ import { useState, useEffect } from 'react';
 // import {useClimate} from '../context/ClimateContext'
 import { useClimate } from '../../context/ClimateContext';
 
+
+
+
+
 function Thermometer() {
 
   const { climate, setClimate} = useClimate();
   const [ currTemp, setCurrTemp ] = useState(climate)
+
+  // const adjustTemp = (currTemp, targetTemp)=>{
+  //   setCurrTemp(prevTemp => prevTemp + 1)
+  // };
+
   useEffect(() => {
     console.log("IN USE EFFECT")
-    // while(currTemp !== climate){
-      // const timer = setTimeout(() => {
-      //   setCurrTemp(prevTemp => prevTemp + 1)
-      // }, 1000);
-      let timer;
-      while(currTemp !== climate){
-        setTimeout(() => {
-          console.log("tick")
+      if(currTemp !== climate){
+        const timer = setTimeout(()=>{
           setCurrTemp(prevTemp => prevTemp + 1)
-        }, 1000);
+        }, 1000)
+        if(currTemp === climate){
+          return function cleanup(){
+            clearTimeout(timer);
+          }
+        }
       }
-      // clearTimeout(timer);
-      console.log(currTemp)
-    // }
-
-  }, [ climate ]);
+  }, [ climate, currTemp ]);
 
   return (
     <section>
